@@ -671,10 +671,10 @@ function selectTime(el) {
 }
 
 function submitBooking() {
-  // Google Form formResponse URL - UPDATED TO HER FORM
-  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSd-01TTptjaHikddu_M4cvgCpo_NrA1aCvI5z8WUYyBRE7e3A/formResponse';
+  // Google Form formResponse URL - USING YOUR WORKING FORM TEMPORARILY
+  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLScRqgPsAcpUjQQxGljmu9W3S1wLzAwvarOBsq3w5yush4iPIQ/formResponse';
 
-  // Date: convert "MON 10" style to MM/DD/YYYY format
+  // Date: convert "MON 10" style to YYYY-MM-DD format (for your working form)
   const selDateEl = document.querySelector('.date-chip.selected');
   let formattedDate = '';
   if (selDateEl) {
@@ -683,10 +683,10 @@ function submitBooking() {
     const d = new Date(now.getFullYear(), now.getMonth(), parseInt(dayNum));
     if (d < now) d.setMonth(d.getMonth() + 1);
     
+    const yyyy = d.getFullYear();
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
-    const yyyy = d.getFullYear();
-    formattedDate = `${mm}/${dd}/${yyyy}`;
+    formattedDate = `${yyyy}-${mm}-${dd}`;
   }
 
   // Time: 24-hour format
@@ -709,12 +709,12 @@ function submitBooking() {
   
   // Add all fields as hidden inputs
   const fields = {
-    'entry.1409416808': bookingData.name,
-    'entry.739513868': bookingData.contact,
-    'entry.2023459570': bookingData.service,
-    'entry.1784807948': formattedDate,
-    'entry.906306362': formattedTime,
-    'entry.1060018185': bookingData.notes || ''
+    'entry.1937189986': bookingData.name,
+    'entry.1766365254': bookingData.contact,
+    'entry.203329478': bookingData.service,
+    'entry.561556156': formattedDate,
+    'entry.1793228396': formattedTime,
+    'entry.1380190950': bookingData.notes || ''
   };
   
   for (const [name, value] of Object.entries(fields)) {
