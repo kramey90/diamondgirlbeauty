@@ -314,24 +314,32 @@
     <div class="section-title"><em>Services</em> & Pricing</div>
     <div class="services-grid">
       <div class="service-item" onclick="goToPage('page-book')">
-        <div class="service-left"><div class="service-icon">💅</div><div><div class="service-name">Gel X Full Set</div><div class="service-desc">Soft gel extensions · any length</div></div></div>
-        <div class="service-right"><div class="service-price">$55+</div><div class="service-time">~2 hrs</div></div>
+        <div class="service-left"><div class="service-icon">💅</div><div><div class="service-name">Builder Gel Mani</div><div class="service-desc">Natural nail enhancement</div></div></div>
+        <div class="service-right"><div class="service-price">$20</div><div class="service-time">~45 min</div></div>
       </div>
       <div class="service-item" onclick="goToPage('page-book')">
-        <div class="service-left"><div class="service-icon">✨</div><div><div class="service-name">Gel X Fill</div><div class="service-desc">Maintain your existing set</div></div></div>
-        <div class="service-right"><div class="service-price">$40+</div><div class="service-time">~1.5 hrs</div></div>
+        <div class="service-left"><div class="service-icon">💎</div><div><div class="service-name">Short Gel X</div><div class="service-desc">Soft gel extensions · short length</div></div></div>
+        <div class="service-right"><div class="service-price">$25</div><div class="service-time">~75 min</div></div>
       </div>
       <div class="service-item" onclick="goToPage('page-book')">
-        <div class="service-left"><div class="service-icon">🎨</div><div><div class="service-name">Nail Art</div><div class="service-desc">Custom designs, gems &amp; chrome</div></div></div>
-        <div class="service-right"><div class="service-price">$5+</div><div class="service-time">per nail</div></div>
+        <div class="service-left"><div class="service-icon">✨</div><div><div class="service-name">Medium Gel X</div><div class="service-desc">Soft gel extensions · medium length</div></div></div>
+        <div class="service-right"><div class="service-price">$30</div><div class="service-time">~90 min</div></div>
       </div>
       <div class="service-item" onclick="goToPage('page-book')">
-        <div class="service-left"><div class="service-icon">💋</div><div><div class="service-name">Press Ons</div><div class="service-desc">Custom-made, sized &amp; designed</div></div></div>
-        <div class="service-right"><div class="service-price">$30+</div><div class="service-time">Ready in 48h</div></div>
+        <div class="service-left"><div class="service-icon">👑</div><div><div class="service-name">Long Gel X</div><div class="service-desc">Soft gel extensions · long length</div></div></div>
+        <div class="service-right"><div class="service-price">$35</div><div class="service-time">~105 min</div></div>
       </div>
       <div class="service-item" onclick="goToPage('page-book')">
-        <div class="service-left"><div class="service-icon">🗑️</div><div><div class="service-name">Soak Off / Removal</div><div class="service-desc">Safe gel removal, no damage</div></div></div>
-        <div class="service-right"><div class="service-price">$15</div><div class="service-time">~30 min</div></div>
+        <div class="service-left"><div class="service-icon">🌸</div><div><div class="service-name">Small Designs</div><div class="service-desc">Simple designs &amp; accents</div></div></div>
+        <div class="service-right"><div class="service-price">+$5</div><div class="service-time">add-on</div></div>
+      </div>
+      <div class="service-item" onclick="goToPage('page-book')">
+        <div class="service-left"><div class="service-icon">🎨</div><div><div class="service-name">Complex Designs</div><div class="service-desc">Intricate art, gems &amp; chrome</div></div></div>
+        <div class="service-right"><div class="service-price">+$10</div><div class="service-time">add-on</div></div>
+      </div>
+      <div class="service-item" onclick="goToPage('page-book')">
+        <div class="service-left"><div class="service-icon">🗑️</div><div><div class="service-name">Soak Off</div><div class="service-desc">Safe gel removal, no damage</div></div></div>
+        <div class="service-right"><div class="service-price">$15</div><div class="service-time">~20 min</div></div>
       </div>
     </div>
     <div style="margin-top:24px;text-align:center;"><p class="text-small">All prices starting — final quote at consultation.<br>DM on Instagram for inspo pics 📲</p></div>
@@ -403,12 +411,25 @@
         <label class="form-label">Select Service</label>
         <select class="form-select" id="sel-service">
           <option value="">— Choose a service —</option>
-          <option value="Gel X Full Set — $55+">Gel X Full Set — $55+</option>
-          <option value="Gel X Fill — $40+">Gel X Fill — $40+</option>
-          <option value="Nail Art Add-on — $5+/nail">Nail Art Add-on — $5+/nail</option>
-          <option value="Press Ons — $30+">Press Ons — $30+</option>
-          <option value="Soak Off / Removal — $15">Soak Off / Removal — $15</option>
+          <option value="Builder Gel Mani — $20">Builder Gel Mani — $20</option>
+          <option value="Short Gel X — $25">Short Gel X — $25</option>
+          <option value="Medium Gel X — $30">Medium Gel X — $30</option>
+          <option value="Long Gel X — $35">Long Gel X — $35</option>
+          <option value="Soak Off — $15">Soak Off — $15</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Add-Ons (Optional)</label>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border:1px solid var(--border);cursor:pointer;">
+            <input type="checkbox" id="addon-small" style="width:18px;height:18px;cursor:pointer;">
+            <span style="font-size:0.82rem;color:var(--white);">Small Designs — +$5</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border:1px solid var(--border);cursor:pointer;">
+            <input type="checkbox" id="addon-complex" style="width:18px;height:18px;cursor:pointer;">
+            <span style="font-size:0.82rem;color:var(--white);">Complex Designs — +$10</span>
+          </label>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Your Name</label>
@@ -496,10 +517,9 @@
         <div style="flex:1;"><div class="contact-link-title">Text to Book</div><div class="contact-link-sub">Quick response · EPTX area</div></div>
         <div class="contact-link-arrow">→</div>
       </a>
-      <div class="contact-link">
+      <div class="contact-link" style="cursor:default;">
         <div class="contact-link-icon" style="background:linear-gradient(135deg,rgba(100,200,100,0.15),rgba(0,0,0,0.1));">💳</div>
-        <div style="flex:1;"><div class="contact-link-title">Payment</div><div class="contact-link-sub">Cash App · Venmo · Cash</div></div>
-        <div class="contact-link-arrow">→</div>
+        <div style="flex:1;"><div class="contact-link-title">Payment Accepted</div><div class="contact-link-sub">Cash App · Venmo · Cash</div></div>
       </div>
     </div>
     <div class="gold-divider" style="margin-top:32px;"><span>✦</span></div>
@@ -555,7 +575,15 @@ function goToStep(n) {
     const name = document.getElementById('inp-name').value.trim();
     const contact = document.getElementById('inp-contact').value.trim();
     if (!svc||!name||!contact) { alert('Please fill in all required fields.'); return; }
-    bookingData = { service:svc, name, contact, notes: document.getElementById('inp-notes').value.trim()||'None' };
+    
+    // Capture add-ons
+    let fullService = svc;
+    const addons = [];
+    if (document.getElementById('addon-small')?.checked) addons.push('Small Designs (+$5)');
+    if (document.getElementById('addon-complex')?.checked) addons.push('Complex Designs (+$10)');
+    if (addons.length > 0) fullService += ' + ' + addons.join(' + ');
+    
+    bookingData = { service:fullService, name, contact, notes: document.getElementById('inp-notes').value.trim()||'None' };
     buildDateGrid();
   }
   if (n===3) {
