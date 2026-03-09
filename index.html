@@ -331,6 +331,11 @@
         <div class="service-left"><div class="service-icon">👑</div><div><div class="service-name">Long Gel X</div><div class="service-desc">Soft gel extensions · long length</div></div></div>
         <div class="service-right"><div class="service-price">$35</div><div class="service-time">~105 min</div></div>
       </div>
+    </div>
+    <div class="gold-divider" style="margin-top:32px;"><span>✦</span></div>
+    <div class="section-label">Add-Ons</div>
+    <div class="section-title" style="font-size:1.8rem;margin-bottom:24px;">Customize <em>Your Set</em></div>
+    <div class="services-grid">
       <div class="service-item" onclick="goToPage('page-book')">
         <div class="service-left"><div class="service-icon">🌸</div><div><div class="service-name">Small Designs</div><div class="service-desc">Simple designs &amp; accents</div></div></div>
         <div class="service-right"><div class="service-price">+$5</div><div class="service-time">add-on</div></div>
@@ -341,7 +346,7 @@
       </div>
       <div class="service-item" onclick="goToPage('page-book')">
         <div class="service-left"><div class="service-icon">🗑️</div><div><div class="service-name">Soak Off</div><div class="service-desc">Safe gel removal, no damage</div></div></div>
-        <div class="service-right"><div class="service-price">$15</div><div class="service-time">~20 min</div></div>
+        <div class="service-right"><div class="service-price">+$15</div><div class="service-time">add-on</div></div>
       </div>
     </div>
     <div style="margin-top:24px;text-align:center;"><p class="text-small">All prices starting — final quote at consultation.<br>DM on Instagram for inspo pics 📲</p></div>
@@ -417,7 +422,6 @@
           <option value="Short Gel X — $25">Short Gel X — $25</option>
           <option value="Medium Gel X — $30">Medium Gel X — $30</option>
           <option value="Long Gel X — $35">Long Gel X — $35</option>
-          <option value="Soak Off — $15">Soak Off — $15</option>
         </select>
       </div>
       <div class="form-group">
@@ -430,6 +434,10 @@
           <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border:1px solid var(--border);cursor:pointer;">
             <input type="checkbox" id="addon-complex" style="width:18px;height:18px;cursor:pointer;">
             <span style="font-size:0.82rem;color:var(--white);">Complex Designs — +$10</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border:1px solid var(--border);cursor:pointer;">
+            <input type="checkbox" id="addon-soakoff" style="width:18px;height:18px;cursor:pointer;">
+            <span style="font-size:0.82rem;color:var(--white);">Soak Off — +$15</span>
           </label>
         </div>
       </div>
@@ -614,6 +622,7 @@ function goToStep(n) {
     const addons = [];
     if (document.getElementById('addon-small')?.checked) addons.push('Small Designs (+$5)');
     if (document.getElementById('addon-complex')?.checked) addons.push('Complex Designs (+$10)');
+    if (document.getElementById('addon-soakoff')?.checked) addons.push('Soak Off (+$15)');
     if (addons.length > 0) fullService += ' + ' + addons.join(' + ');
     
     bookingData = { service:fullService, name, contact, notes: document.getElementById('inp-notes').value.trim()||'None' };
@@ -662,14 +671,14 @@ function selectTime(el) {
 }
 
 function submitBooking() {
-  // Google Form entry IDs
-  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLScRqgPsAcpUjQQxGljmu9W3S1wLzAwvarOBsq3w5yush4iPIQ/formResponse';
+  // Google Form entry IDs for Diamond Girl Beauty
+  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSd-01TTptjaHikddu_M4cvgCpo_NrA1aCvI5z8WUYyBRE7e3A/formResponse';
 
   // Build form data from bookingData
   const params = new URLSearchParams();
-  params.append('entry.1937189986', bookingData.name);
-  params.append('entry.1766365254', bookingData.contact);
-  params.append('entry.203329478',  bookingData.service);
+  params.append('entry.1409416808', bookingData.name);        // Your Name
+  params.append('entry.739513868', bookingData.contact);      // Phone or Instagram
+  params.append('entry.2023459570', bookingData.service);     // Service
 
   // Date: convert "MON 10" style to YYYY-MM-DD
   const selDateEl = document.querySelector('.date-chip.selected');
@@ -682,7 +691,7 @@ function submitBooking() {
     const yyyy = d.getFullYear();
     const mm = String(d.getMonth()+1).padStart(2,'0');
     const dd = String(d.getDate()).padStart(2,'0');
-    params.append('entry.561556156', `${yyyy}-${mm}-${dd}`);
+    params.append('entry.1784807948', `${yyyy}-${mm}-${dd}`);  // Preferred Date
   }
 
   // Time: convert "10:00 AM" to 24hr HH:MM
@@ -692,10 +701,10 @@ function submitBooking() {
     let [h, m] = time.split(':').map(Number);
     if (meridiem === 'PM' && h !== 12) h += 12;
     if (meridiem === 'AM' && h === 12) h = 0;
-    params.append('entry.1793228396', `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+    params.append('entry.906306362', `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);  // Preferred Time
   }
 
-  params.append('entry.1380190950', bookingData.notes || '');
+  params.append('entry.1060018185', bookingData.notes || '');  // Nail Inspo / Notes
 
   // Submit via hidden iframe (avoids CORS redirect)
   const iframe = document.getElementById('gform-iframe') || document.createElement('iframe');
@@ -708,12 +717,12 @@ function submitBooking() {
   form.method = 'POST';
   form.action = FORM_ACTION;
   form.target = 'gform-iframe';
-  form.innerHTML = `<input name="entry.1937189986" value="${bookingData.name}">
-    <input name="entry.1766365254" value="${bookingData.contact}">
-    <input name="entry.203329478" value="${bookingData.service}">
-    <input name="entry.561556156" value="${params.get('entry.561556156')}">
-    <input name="entry.1793228396" value="${params.get('entry.1793228396')}">
-    <input name="entry.1380190950" value="${bookingData.notes || ''}">`;
+  form.innerHTML = `<input name="entry.1409416808" value="${bookingData.name}">
+    <input name="entry.739513868" value="${bookingData.contact}">
+    <input name="entry.2023459570" value="${bookingData.service}">
+    <input name="entry.1784807948" value="${params.get('entry.1784807948')}">
+    <input name="entry.906306362" value="${params.get('entry.906306362')}">
+    <input name="entry.1060018185" value="${bookingData.notes || ''}">`;
   document.body.appendChild(form);
   form.submit();
   document.body.removeChild(form);
