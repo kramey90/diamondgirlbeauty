@@ -680,7 +680,7 @@ function submitBooking() {
   params.append('entry.739513868', bookingData.contact);      // Phone or Instagram
   params.append('entry.2023459570', bookingData.service);     // Service
 
-  // Date: convert "MON 10" style to YYYY-MM-DD
+  // Date: convert "MON 10" style to "Month day, year" format for Google Forms
   const selDateEl = document.querySelector('.date-chip.selected');
   if (selDateEl) {
     const dayNum = selDateEl.querySelector('.date-chip-num').textContent;
@@ -688,30 +688,44 @@ function submitBooking() {
     const d = new Date(now.getFullYear(), now.getMonth(), parseInt(dayNum));
     // If day already passed this month, it's next month
     if (d < now) d.setMonth(d.getMonth() + 1);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    const dd = String(d.getDate()).padStart(2,'0');
-    params.append('entry.1784807948', `${yyyy}-${mm}-${dd}`);  // Preferred Date
+    
+    // Format as "Month day, year" (e.g., "March 15, 2026")
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const formattedDate = `${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    params.append('entry.1784807948', formattedDate);
   }
 
-  // Time: convert "10:00 AM" to 24hr HH:MM
+  // Time: Google Forms expects HH:MM format (24-hour)
   const timeStr = bookingData.time;
   if (timeStr) {
     const [time, meridiem] = timeStr.split(' ');
     let [h, m] = time.split(':').map(Number);
     if (meridiem === 'PM' && h !== 12) h += 12;
     if (meridiem === 'AM' && h === 12) h = 0;
-    params.append('entry.906306362', `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);  // Preferred Time
+    params.append('entry.906306362', `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
   }
 
   params.append('entry.1060018185', bookingData.notes || '');  // Nail Inspo / Notes
+
+  // Console log for debugging (remove after testing)
+  console.log('Submitting booking data:', {
+    name: bookingData.name,
+    contact: bookingData.contact,
+    service: bookingData.service,
+    date: params.get('entry.1784807948'),
+    time: params.get('entry.906306362'),
+    notes: params.get('entry.1060018185')
+  });
 
   // Submit via hidden iframe (avoids CORS redirect)
   const iframe = document.getElementById('gform-iframe') || document.createElement('iframe');
   iframe.id = 'gform-iframe';
   iframe.name = 'gform-iframe';
   iframe.style.display = 'none';
-  document.body.appendChild(iframe);
+  if (!document.body.contains(iframe)) {
+    document.body.appendChild(iframe);
+  }
 
   const form = document.createElement('form');
   form.method = 'POST';
@@ -720,12 +734,18 @@ function submitBooking() {
   form.innerHTML = `<input name="entry.1409416808" value="${bookingData.name}">
     <input name="entry.739513868" value="${bookingData.contact}">
     <input name="entry.2023459570" value="${bookingData.service}">
-    <input name="entry.1784807948" value="${params.get('entry.1784807948')}">
-    <input name="entry.906306362" value="${params.get('entry.906306362')}">
-    <input name="entry.1060018185" value="${bookingData.notes || ''}">`;
+    <input name="entry.1784807948" value="${params.get('entry.1784807948') || ''}">
+    <input name="entry.906306362" value="${params.get('entry.906306362') || ''}">
+    <input name="entry.1060018185" value="${(bookingData.notes || '').replace(/"/g, '&quot;')}">`;
   document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
+  
+  // Add a small delay to ensure iframe is ready
+  setTimeout(() => {
+    form.submit();
+    setTimeout(() => {
+      document.body.removeChild(form);
+    }, 100);
+  }, 100);
 
   // Show success screen
   document.getElementById('booking-form-view').style.display='none';
