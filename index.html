@@ -674,7 +674,7 @@ function submitBooking() {
   // Google Form formResponse URL
   const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSd-01TTptjaHikddu_M4cvgCpo_NrA1aCvI5z8WUYyBRE7e3A/formResponse';
 
-  // Date: convert "MON 10" style to "Month day, year" format
+  // Date: convert "MON 10" style to YYYY-MM-DD format
   const selDateEl = document.querySelector('.date-chip.selected');
   let formattedDate = '';
   if (selDateEl) {
@@ -683,9 +683,10 @@ function submitBooking() {
     const d = new Date(now.getFullYear(), now.getMonth(), parseInt(dayNum));
     if (d < now) d.setMonth(d.getMonth() + 1);
     
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                        'July', 'August', 'September', 'October', 'November', 'December'];
-    formattedDate = `${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    formattedDate = `${yyyy}-${mm}-${dd}`;
   }
 
   // Time: 24-hour format
