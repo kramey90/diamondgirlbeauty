@@ -671,85 +671,79 @@ function selectTime(el) {
 }
 
 function submitBooking() {
-  // Google Form entry IDs for Diamond Girl Beauty
+  // Google Form formResponse URL
   const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSd-01TTptjaHikddu_M4cvgCpo_NrA1aCvI5z8WUYyBRE7e3A/formResponse';
 
-  // Build form data from bookingData
-  const params = new URLSearchParams();
-  params.append('entry.1409416808', bookingData.name);        // Your Name
-  params.append('entry.739513868', bookingData.contact);      // Phone or Instagram
-  params.append('entry.2023459570', bookingData.service);     // Service
-
-  // Date: convert "MON 10" style to "Month day, year" format for Google Forms
+  // Date: convert "MON 10" style to "Month day, year" format
   const selDateEl = document.querySelector('.date-chip.selected');
+  let formattedDate = '';
   if (selDateEl) {
     const dayNum = selDateEl.querySelector('.date-chip-num').textContent;
     const now = new Date();
     const d = new Date(now.getFullYear(), now.getMonth(), parseInt(dayNum));
-    // If day already passed this month, it's next month
     if (d < now) d.setMonth(d.getMonth() + 1);
     
-    // Format as "Month day, year" (e.g., "March 15, 2026")
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                         'July', 'August', 'September', 'October', 'November', 'December'];
-    const formattedDate = `${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-    params.append('entry.1784807948', formattedDate);
+    formattedDate = `${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
   }
 
-  // Time: Google Forms expects HH:MM format (24-hour)
+  // Time: 24-hour format
   const timeStr = bookingData.time;
+  let formattedTime = '';
   if (timeStr) {
     const [time, meridiem] = timeStr.split(' ');
     let [h, m] = time.split(':').map(Number);
     if (meridiem === 'PM' && h !== 12) h += 12;
     if (meridiem === 'AM' && h === 12) h = 0;
-    params.append('entry.906306362', `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+    formattedTime = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
   }
 
-  params.append('entry.1060018185', bookingData.notes || '');  // Nail Inspo / Notes
-
-  // Console log for debugging (remove after testing)
-  console.log('Submitting booking data:', {
-    name: bookingData.name,
-    contact: bookingData.contact,
-    service: bookingData.service,
-    date: params.get('entry.1784807948'),
-    time: params.get('entry.906306362'),
-    notes: params.get('entry.1060018185')
-  });
-
-  // Submit via hidden iframe (avoids CORS redirect)
-  const iframe = document.getElementById('gform-iframe') || document.createElement('iframe');
-  iframe.id = 'gform-iframe';
-  iframe.name = 'gform-iframe';
-  iframe.style.display = 'none';
-  if (!document.body.contains(iframe)) {
-    document.body.appendChild(iframe);
-  }
-
+  // Create and submit form
   const form = document.createElement('form');
   form.method = 'POST';
   form.action = FORM_ACTION;
-  form.target = 'gform-iframe';
-  form.innerHTML = `<input name="entry.1409416808" value="${bookingData.name}">
-    <input name="entry.739513868" value="${bookingData.contact}">
-    <input name="entry.2023459570" value="${bookingData.service}">
-    <input name="entry.1784807948" value="${params.get('entry.1784807948') || ''}">
-    <input name="entry.906306362" value="${params.get('entry.906306362') || ''}">
-    <input name="entry.1060018185" value="${(bookingData.notes || '').replace(/"/g, '&quot;')}">`;
-  document.body.appendChild(form);
+  form.target = 'hidden_iframe';
+  form.style.display = 'none';
   
-  // Add a small delay to ensure iframe is ready
+  // Add all fields as hidden inputs
+  const fields = {
+    'entry.1409416808': bookingData.name,
+    'entry.739513868': bookingData.contact,
+    'entry.2023459570': bookingData.service,
+    'entry.1784807948': formattedDate,
+    'entry.906306362': formattedTime,
+    'entry.1060018185': bookingData.notes || ''
+  };
+  
+  for (const [name, value] of Object.entries(fields)) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value;
+    form.appendChild(input);
+  }
+  
+  // Create hidden iframe if it doesn't exist
+  let iframe = document.getElementById('hidden_iframe');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'hidden_iframe';
+    iframe.name = 'hidden_iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+  }
+  
+  // Append form and submit
+  document.body.appendChild(form);
+  form.submit();
+  
+  // Clean up and show success
   setTimeout(() => {
-    form.submit();
-    setTimeout(() => {
-      document.body.removeChild(form);
-    }, 100);
-  }, 100);
-
-  // Show success screen
-  document.getElementById('booking-form-view').style.display='none';
-  document.getElementById('booking-success').classList.add('show');
+    if (form.parentNode) document.body.removeChild(form);
+    document.getElementById('booking-form-view').style.display='none';
+    document.getElementById('booking-success').classList.add('show');
+  }, 500);
 }
 
 function resetBooking() {
