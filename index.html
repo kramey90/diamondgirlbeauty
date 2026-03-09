@@ -279,10 +279,21 @@
           <option value="Short Gel X — $25">Short Gel X — $25</option>
           <option value="Medium Gel X — $30">Medium Gel X — $30</option>
           <option value="Long Gel X — $35">Long Gel X — $35</option>
-          <option value="Small Designs — +$5">Small Designs — +$5</option>
-          <option value="Complex Designs — +$10">Complex Designs — +$10</option>
           <option value="Soak Off — $15">Soak Off — $15</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Add-Ons (Optional)</label>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border:1px solid var(--border);cursor:pointer;">
+            <input type="checkbox" id="addon-small" style="width:18px;height:18px;cursor:pointer;">
+            <span style="font-size:0.82rem;color:var(--white);">Small Designs — +$5</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--card);border:1px solid var(--border);cursor:pointer;">
+            <input type="checkbox" id="addon-complex" style="width:18px;height:18px;cursor:pointer;">
+            <span style="font-size:0.82rem;color:var(--white);">Complex Designs — +$10</span>
+          </label>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Your Name</label>
@@ -426,7 +437,15 @@ function goToStep(n) {
     const name = document.getElementById('inp-name').value.trim();
     const contact = document.getElementById('inp-contact').value.trim();
     if (!svc||!name||!contact) { alert('Please fill in all required fields.'); return; }
-    bookingData = { service:svc, name, contact, notes: document.getElementById('inp-notes').value.trim()||'None' };
+    
+    // Capture add-ons
+    let fullService = svc;
+    const addons = [];
+    if (document.getElementById('addon-small')?.checked) addons.push('Small Designs (+$5)');
+    if (document.getElementById('addon-complex')?.checked) addons.push('Complex Designs (+$10)');
+    if (addons.length > 0) fullService += ' + ' + addons.join(' + ');
+    
+    bookingData = { service:fullService, name, contact, notes: document.getElementById('inp-notes').value.trim()||'None' };
     buildDateGrid();
   }
   if (n===3) {
