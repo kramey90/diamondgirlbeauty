@@ -671,8 +671,8 @@ function selectTime(el) {
 }
 
 function submitBooking() {
-  // Google Form formResponse URL - USING YOUR WORKING FORM TEMPORARILY
-  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLScRqgPsAcpUjQQxGljmu9W3S1wLzAwvarOBsq3w5yush4iPIQ/formResponse';
+  // Google Form formResponse URL - HER NEW FORM
+  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSe6h79BAJaf3Km59MARuPr61Z1n825U1Ui42fTl8IerY3svFQ/formResponse';
 
   // Date: convert "MON 10" style to YYYY-MM-DD format (for your working form)
   const selDateEl = document.querySelector('.date-chip.selected');
@@ -709,12 +709,12 @@ function submitBooking() {
   
   // Add all fields as hidden inputs
   const fields = {
-    'entry.1937189986': bookingData.name,
-    'entry.1766365254': bookingData.contact,
-    'entry.203329478': bookingData.service,
-    'entry.561556156': formattedDate,
-    'entry.1793228396': formattedTime,
-    'entry.1380190950': bookingData.notes || ''
+    'entry.2108234634': bookingData.name,
+    'entry.1831985679': bookingData.contact,
+    'entry.1256280704': bookingData.service,
+    'entry.1931061399': formattedDate,
+    'entry.504027981': formattedTime,
+    'entry.1936873911': bookingData.notes || ''
   };
   
   for (const [name, value] of Object.entries(fields)) {
