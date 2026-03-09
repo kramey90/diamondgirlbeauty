@@ -569,6 +569,37 @@ function goToPage(id) {
   window.scrollTo(0,0);
 }
 
+// Swipe navigation for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+function handleSwipe() {
+  const swipeThreshold = 50; // minimum distance for a swipe
+  const diff = touchEndX - touchStartX;
+  
+  if (Math.abs(diff) < swipeThreshold) return; // ignore small movements
+  
+  // Find current active page
+  const currentPageIndex = pages.findIndex(p => document.getElementById(p).classList.contains('active'));
+  
+  if (diff > 0 && currentPageIndex > 0) {
+    // Swiped right - go to previous page
+    goToPage(pages[currentPageIndex - 1]);
+  } else if (diff < 0 && currentPageIndex < pages.length - 1) {
+    // Swiped left - go to next page
+    goToPage(pages[currentPageIndex + 1]);
+  }
+}
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
 let bookingData = {};
 
 function goToStep(n) {
