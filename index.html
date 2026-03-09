@@ -471,6 +471,63 @@ function selectTime(el) {
 }
 
 function submitBooking() {
+  // Google Form entry IDs
+  const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLScRqgPsAcpUjQQxGljmu9W3S1wLzAwvarOBsq3w5yush4iPIQ/formResponse';
+
+  // Build form data from bookingData
+  const params = new URLSearchParams();
+  params.append('entry.1937189986', bookingData.name);
+  params.append('entry.1766365254', bookingData.contact);
+  params.append('entry.203329478',  bookingData.service);
+
+  // Date: convert "MON 10" style to YYYY-MM-DD
+  const selDateEl = document.querySelector('.date-chip.selected');
+  if (selDateEl) {
+    const dayNum = selDateEl.querySelector('.date-chip-num').textContent;
+    const now = new Date();
+    const d = new Date(now.getFullYear(), now.getMonth(), parseInt(dayNum));
+    // If day already passed this month, it's next month
+    if (d < now) d.setMonth(d.getMonth() + 1);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    params.append('entry.561556156', `${yyyy}-${mm}-${dd}`);
+  }
+
+  // Time: convert "10:00 AM" to 24hr HH:MM
+  const timeStr = bookingData.time;
+  if (timeStr) {
+    const [time, meridiem] = timeStr.split(' ');
+    let [h, m] = time.split(':').map(Number);
+    if (meridiem === 'PM' && h !== 12) h += 12;
+    if (meridiem === 'AM' && h === 12) h = 0;
+    params.append('entry.1793228396', `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`);
+  }
+
+  params.append('entry.1380190950', bookingData.notes || '');
+
+  // Submit via hidden iframe (avoids CORS redirect)
+  const iframe = document.getElementById('gform-iframe') || document.createElement('iframe');
+  iframe.id = 'gform-iframe';
+  iframe.name = 'gform-iframe';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = FORM_ACTION;
+  form.target = 'gform-iframe';
+  form.innerHTML = `<input name="entry.1937189986" value="${bookingData.name}">
+    <input name="entry.1766365254" value="${bookingData.contact}">
+    <input name="entry.203329478" value="${bookingData.service}">
+    <input name="entry.561556156" value="${params.get('entry.561556156')}">
+    <input name="entry.1793228396" value="${params.get('entry.1793228396')}">
+    <input name="entry.1380190950" value="${bookingData.notes || ''}">`;
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+
+  // Show success screen
   document.getElementById('booking-form-view').style.display='none';
   document.getElementById('booking-success').classList.add('show');
 }
